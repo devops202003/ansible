@@ -1,0 +1,16 @@
+---
+- name: Copy NRPE Config
+  template:
+    src: nrpe.cfg.j2
+    dest: "{{ nrpe_path }}/nrpe.cfg"
+  tags:
+  - always
+
+- name: Copy Required Custom Plugins
+  copy: 
+    src: check_memory
+    dest: "{{ plugin_path }}/check_memory"
+  notify: Restart NRPE
+  tags:
+  - restartNrpe
+

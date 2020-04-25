@@ -1,0 +1,10 @@
+---
+# Variables listed here are applicable to all host groups
+
+ansible_user: ec2-user
+ansible_ssh_private_key_file: /root/workshop/ansible/ansible-examples/lamp_simple/devops.pem
+
+
+httpd_port: 80
+ntpserver: 192.168.1.2
+repository: https://github.com/devops202003/application1.git 

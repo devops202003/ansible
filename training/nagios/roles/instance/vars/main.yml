@@ -1,0 +1,11 @@
+---
+# vars file for instance
+nagiosNrpeAMI: ami-0e456a37c45ae077b 
+nagiosmaster: 15.206.152.242
+serverKey: devops
+instance_type: t2.micro
+security_group: ansible-webserver-sg
+image: "{{ nagiosNrpeAMI }}"
+keypair: "{{ serverKey }}"
+region: ap-south-1
+count: 1

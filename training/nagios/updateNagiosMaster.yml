@@ -1,0 +1,9 @@
+---
+- hosts: nmaster
+  become: yes
+  tasks:
+    - name: Copy host file
+      templates: 
+        src: hosts.cfg.j2
+        dest: /etc/nagios/objects/nameHost.cfg
+

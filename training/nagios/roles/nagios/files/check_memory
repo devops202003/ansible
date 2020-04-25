@@ -1,0 +1,29 @@
+#!/bin/bash
+
+# 0 : OK
+# 1 : WARN
+# 2 : CRIT
+
+WARN=$1
+CRIT=$2
+
+TOTAL_MEM=$(free -m | grep Mem| awk '{print $2}')
+FREE_MEM=$(free -m | grep Mem| awk '{print $3}')
+MEM_PERCENT=`echo $(( FREE_MEM*100/TOTAL_MEM ))`
+
+
+if [ $MEM_PERCENT -lt $WARN ];then
+        echo "OK: $MEM_PERCENT% Used"
+        exit 0
+fi
+
+
+if [ $MEM_PERCENT -gt $CRIT ];then
+        echo "MEMORY CRITICAL: $MEM_PERCENT% Used"
+        exit 2
+fi
+
+if [ $MEM_PERCENT -gt $WARN ];then
+	echo "MEMORY WARN: $MEM_PERCENT% Used"
+	exit 1
+fi

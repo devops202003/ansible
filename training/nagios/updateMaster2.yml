@@ -1,0 +1,6 @@
+---
+- hosts: nmaster
+  templates: 
+    src: hosts.cfg.j2
+    dest: /etc/nagios/objects/nameHost.cfg
+

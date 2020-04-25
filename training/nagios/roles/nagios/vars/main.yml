@@ -1,0 +1,3 @@
+---
+nrpe_path: /usr/local/nagios/etc
+plugin_path: /usr/local/nagios/libexec

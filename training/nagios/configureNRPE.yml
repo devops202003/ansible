@@ -1,0 +1,12 @@
+---
+- name: "Create NRPE Agent Server in AWS" 
+  hosts: local
+  roles:
+    - instance
+
+- name: "Setup NRPE"
+  hosts: web
+  become: yes
+  roles:
+    - nagios
+...

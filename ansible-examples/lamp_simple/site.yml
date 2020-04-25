@@ -1,0 +1,26 @@
+---
+# This playbook deploys the whole application stack in this site.
+
+- name: apply common configuration to all nodes
+  hosts: all
+  become: yes
+#  remote_user: ec2-user
+
+  roles:
+#    - common
+
+- name: configure and deploy the webservers and application code
+  hosts: webservers
+  become: yes
+#  remote_user: ec2-user
+
+  roles:
+#    - web
+
+- name: deploy MySQL and configure the databases
+  hosts: dbservers
+  become: yes
+#  remote_user: ec2-user
+
+  roles:
+    - db

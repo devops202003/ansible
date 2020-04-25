@@ -1,0 +1,68 @@
+---
+- name: Create a security group for nrpe
+  ec2_group:
+    name: "{{ security_group }}"
+    description: SG for NRPE
+    region: "{{ region }}"
+    rules:
+      - proto: tcp
+        from_port: 22
+        to_port: 22
+        cidr_ip: 0.0.0.0/0
+      - proto: tcp
+        from_port: 80
+        to_port: 80
+        cidr_ip: 0.0.0.0/0
+      - proto: tcp
+        from_port: 443
+        to_port: 443
+        cidr_ip: 0.0.0.0/0
+      - proto: tcp
+        from_port: 5666
+        to_port: 5666
+        cidr_ip: "{{ nagiosmaster }}/32"
+    rules_egress:
+      - proto: all
+        cidr_ip: 0.0.0.0/0
+  register: basic_firewall
+  tags:
+  - secGroup
+
+- name: Launch the new EC2 Instance
+  ec2:
+    group: "{{ security_group }}"
+    instance_type: "{{ instance_type }}"
+    image: "{{ image }}"
+    wait: true
+    region: "{{ region }}"
+    keypair: "{{ keypair }}"
+    count: "{{ count }}"
+    instance_tags:
+      Name: agent
+      Env: Web
+  register: ec2
+  tags:
+  - ec2Launch
+
+- debug:
+    var: ec2.instances[0].public_ip
+- set_fact:
+    ipAddress: "{{ ec2.instances[0].public_ip }}"
+    nameHost: "{{ ec2.instances[0].public_ip }}"
+#- debug: 
+#    msg: "Instance Created with IP {{ ec2.instances[0].public_ip }} and the current state is {{ ec2.results[0].state }}"
+#  tags:
+#  - ec2List
+
+- add_host: 
+    hostname: "{{ ec2.instances[0].public_ip }}" 
+    groups: web
+
+- name: Add host to web
+  lineinfile: 
+    path: "/root/workshop/ansible/training/nagios/hosts" 
+    regexp: '^[web]'
+    insertafter: '^[web]' 
+    line: "{{ ec2.instances[0].public_ip }}"
+
+
